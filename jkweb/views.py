@@ -2,6 +2,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from accounts.models import registery
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
+
 
 def my_view(request):
     r1 = random.randint(0, 9)
@@ -22,9 +24,15 @@ def home(request):
 
 def signup(request):
     if request.method == 'POST':
-        username=request.POST.get('username')
-        password1=request.POST.get('password1')
-        email=request.POST.get('email')
+        # create new user object 
+        user = User.objects.create_user(
+            username=request.POST.get('username'),
+            password=request.POST.get('password1'),
+            email=request.POST.get('email'),
+        )
+        # save user object
+        user.save()
+
         phone=request.POST.get('phoneno')
         city=request.POST.get('city')
         question=request.POST.get('question')
@@ -36,29 +44,37 @@ def signup(request):
         else:
             term=False
             
-        sv = registery(username=username,password=password1,email=email,phoneno=phone,city=city,question=question,answer=answer,role=role,terms=term)
+        sv = registery(phoneno=phone,city=city,question=question,answer=answer,role=role,terms=term, user=user)
         sv.save()
+        # login user
+        login(request, user)
         return redirect('home')
         # login(request, sv)
     else:
         
-        return render(request, 'register.html')
+        return render(request, 'page-register.html')
 
 def loginin(request):
+    # clear current session
+    request.session.flush()
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-           
             return redirect('home')
         else:
+            print ("Invalid login credentials")
             context = {'error': 'Invalid login credentials'}
             return render(request, 'page-login.html', context)
     else:
         return render(request, 'page-login.html')
-    
+def logout(request):
+    # clear current session
+    request.session.flush()
+    return redirect('home')
+
 def pgregister(request):
     return render(request, 'register.html')
 

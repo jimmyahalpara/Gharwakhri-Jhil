@@ -1,13 +1,13 @@
 from django.db import models
-
+# import auth user modle 
+from django.contrib.auth.models import User
 class registery(models.Model):
     ROLE_CHOICES = (
         ('seller', 'Seller'),
         ('buyer', 'Buyer')
     )
-    username = models.CharField(max_length=50)
-    password = models.CharField(max_length=50)
-    email = models.CharField(max_length=50)
+    # foreign key user_id 
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     phoneno = models.CharField(max_length=50)
     city = models.CharField(max_length=50)
     QUESTION_CHOICES = (

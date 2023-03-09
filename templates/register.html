@@ -4,7 +4,7 @@
 {% static 'image' as baseUrl %}
 <div style="position:relative; background:url({% static 'image/chef/pattern.png' %}); margin-top:80px;">
 <div class="container" style="position:relative;">
-	<form action="new"  method="post" style="position:relative">
+	<form action="{% url 'signupapp:registeruser' %}"  method="post" style="position:relative">
         {% csrf_token %}
     <h1 align="center" class="alert-danger" style="color:#FF0000; font-size:50px; font-family:Forte;">Create New Account</h1>
     <div class="form-row">

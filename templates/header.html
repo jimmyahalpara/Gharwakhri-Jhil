@@ -295,15 +295,37 @@
                                     <a href="{% url 'signup' %}">
                                         <img class="svgInject" alt="Nest" src="/static/assets/imgs/theme/icons/icon-user.svg" />
                                     </a>
-                                    <a href="{% url 'signup' %}">
-                                        <span class="lable ml-0">Account</span>
-                                    </a>
+                                    {% if request.user.is_authenticated %}
+                                        <a href="#">
+                                            <span class="lable ml-0">
+                                                <span>Welcome, {{ request.user.username }}!</span>
+                                            </span>
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'signup' %}">
+                                            <span class="lable ml-0">
+                                                <span>Account</span>
+                                            </span>
+                                        </a>
+                                    {% endif %}
                                     <div class="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
                                         <ul>
-                                           
+                                            {% if request.user.is_authenticated %}
                                               <li><a href="#"><i class="fi fi-rs-user mr-10"></i>My Account</a></li>
-                                            
-                                              <li><a href="#"><span class="material-symbols-outlined"></span>Login</a></li>
+                                              {% endif %}
+                                              <li>
+                                                {% if request.user.is_authenticated %}
+                                                <a href="{% url 'logout' %}">
+                                                    <span class="material-symbols-outlined"></span>
+                                                        Logout
+                                                </a>
+                                                {% else %}
+                                                <a href="{% url 'loginin' %}">
+                                                    <span class="material-symbols-outlined"></span>
+                                                        Login
+                                                </a>
+                                                {% endif %}
+                                            </li>
                                             
                                             {% comment %} <li><a href="{% url 'pgaccount' %}"><i class="fi fi-rs-location-alt mr-10"></i>Order Tracking</a></li> {% endcomment %}
                                             <!-- <li><a href="/page-account.html"><i class="fi fi-rs-label mr-10"></i>My Voucher</a></li> -->

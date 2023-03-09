@@ -2,22 +2,29 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from .forms import RegisterUserForm
+# from .forms import RegisterUserForm
+import json
+from django.http import JsonResponse
 
 def register_user(request):
     if request.method == 'POST':
-        form=RegisterUserForm(request.POST)
-        if form.is_valid()
-            form.save()
-            username=form.cleaned_data['username']
-            password=form.cleaned_data['password']
-            user=authenticate(username=username,password=password)
-            login(request,user)
-            messages.success(request,("Success"))
-            return redirect('home')
-        else:
-            form=RegisterUserForm()
-            return render(request,'page-register.html',{'form',form})
+        # form=RegisterUserForm(request.POST)
+        # if form.is_valid():
+        #     form.save()
+        #     username=form.cleaned_data['username']
+        #     password=form.cleaned_data['password']
+        #     user=authenticate(username=username,password=password)
+        #     login(request,user)
+        #     messages.success(request,("Success"))
+        #     return redirect('home')
+        # else:
+        #     form=RegisterUserForm()
+        #     return render(request,'page-register.html',{'form',form})
+        
+        # return request post data as json 
+        data = json.loads(request.body)
+        # return it 
+        return data
 
 def login_user(request):
     if request.method == 'POST':
@@ -29,6 +36,6 @@ def login_user(request):
             return redirect('home')
         else:
             return redirect('loginuser')
-            messages.success(request,("Not a user")
+            messages.success(request,("Not a user"))
     else:
         return render(request,'page-login.html')
